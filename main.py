@@ -4,6 +4,7 @@ import pywhatkit
 import datetime
 import wikipedia
 import pyjokes
+import subprocess
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
@@ -34,6 +35,20 @@ def take_command():
 def run_alexa():
     command = take_command()
     print(command)
+    if 'wikipedia' in query:
+        talk("Searching Wikipedia...")
+        query = command.replace('wikipedia', "")
+        results = wikipedia.summary(query,sentences=3)
+        print(results)
+        talk(f"According to wikipedia {results}")
+            
+    elif "youtube" in query:
+        subprocess.call([r'C:\Program Files\Mozilla Firefox\firefox.exe','-new-tab', 'http://www.youtube.com/'])
+    elif "firefox" in query:
+        subprocess.call([r'C:\Program Files\Mozilla Firefox\firefox.exe','-new-tab', ''])
+    elif "creator" in query:
+        talk("Mr Donald Trump")
+ 
     if 'play' in command:
         song = command.replace('play', '')
         talk('playing ' + song)
