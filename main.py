@@ -1,3 +1,5 @@
+import sys
+
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
@@ -9,52 +11,59 @@ listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
+engine. setProperty("rate", 158)
 
 
 def talk(text):
     engine.say(text)
     engine.runAndWait()
 
+def takecommand():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
 
-def take_command():
     try:
-        with sr.Microphone() as source:
-            print('listening...')
-            voice = listener.listen(source)
-            command = listener.recognize_google(voice)
-            command = command.lower()
-            if 'alexa' in command:
-                command = command.replace('alexa', '')
-                print(command)
-    except:
-        pass
+        print("Recognizing...")
+        command = r.recognize_google(audio, language='en-in')
+        print(f"User said: {command}\n")
+
+    except Exception as e:
+
+        print("Say that again please...")
+        return "None"
     return command
 
 
-def run_alexa():
-    command = take_command()
-    print(command)
-    if 'play' in command:
-        song = command.replace('play', '')
-        talk('playing ' + song)
-        pywhatkit.playonyt(song)
-    elif 'time' in command:
-        time = datetime.datetime.now().strftime('%I:%M %p')
-        talk('Current time is ' + time)
-    elif 'who the heck is' in command:
-        person = command.replace('who the heck is', '')
-        info = wikipedia.summary(person, 1)
-        print(info)
-        talk(info)
-    elif 'date' in command:
-        talk('sorry, I have a headache')
-    elif 'are you single' in command:
-        talk('I am in a relationship with wifi')
-    elif 'joke' in command:
-        talk(pyjokes.get_joke())
-    else:
-        talk('Please say the command again.')
+if __name__ == "__main__":
+    while True:
+        wakeup = takecommand().lower()
+        #you can wake up the assistant using a keyword. The assistant will wait until you say that specific keyword
+        if 'assistant' in wakeup:
+            talk('Tell me')
+            #here the assistant will take your command
+            command = takecommand().lower()
 
-
-while True:
-    run_alexa()
+            if 'play' in command:
+                song = command.replace('play', '')
+                talk('Playing ' + song)
+                pywhatkit.playonyt(song)
+            elif 'time' in command:
+                time = datetime.datetime.now().strftime('%I:%M %p')
+                talk(time)
+            elif 'who is' or 'what is' in command:
+                person = command.replace('who is', '')
+                person = command.replace('what is', '')
+                info = wikipedia.summary(person, 1)
+                print(info)
+                talk(info)
+            elif 'joke' in command:
+                talk(pyjokes.get_joke())
+            elif 'turn off' or 'shutdown' in command:
+                talk('Ok, see you later')
+                sys.exit(-1)
+            #if the command is not recognized it will ask for the keyword again, like Alexa or Google Assistant
+            else:
+                pass
