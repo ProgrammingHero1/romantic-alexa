@@ -1,9 +1,9 @@
-import speech_recognition as sr
-import pyttsx3
-import pywhatkit
-import datetime
-import wikipedia
-import pyjokes
+import speech_recognition as sr #pip install speech_recognition
+import pyttsx3 # pip install pyttsx3
+import pywhatkit # pip install pywhatkit
+import datetime 
+import wikipedia # pip install wikipedia
+import pyjokes # pip install pyjokes
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
