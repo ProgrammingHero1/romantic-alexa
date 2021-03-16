@@ -9,6 +9,8 @@ To watch the tutorial, click on the image below
 ## Installation
 ### For windows users
 (run those in command prompt/cmt/terminal)
+You can intall all the libraris with `pip install -r requirements.txt` or one-by-one.
+
 For the robot to listen to our voice/speech
 `pip install speechRecognition`
 
