@@ -20,7 +20,9 @@ def take_command():
     try:
         with sr.Microphone() as source:
             print('listening...')
-            voice = listener.listen(source)
+            #Fixed the issue where the program was listening forever 
+            # It will wait for 10 seconds , stop and give a result
+            voice = listener.listen(source , None , 10)
             command = listener.recognize_google(voice)
             command = command.lower()
             if 'alexa' in command:
@@ -55,6 +57,10 @@ def run_alexa():
     else:
         talk('Please say the command again.')
 
-
+# In the program in some devices where mic system is bad unboundlocalerror happens and stops the program
+# So rather than stopping the program we are just printing it for our confirmation
 while True:
-    run_alexa()
+    try:
+        run_alexa()
+    except UnboundLocalError:
+        print("Can't give results right now")
