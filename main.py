@@ -8,6 +8,8 @@ import pyjokes
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
+#In case this doesn't work
+# engine.setProperty('voice', voices[0].id)
 engine.setProperty('voice', voices[1].id)
 
 
@@ -63,4 +65,5 @@ while True:
     try:
         run_alexa()
     except UnboundLocalError:
-        print("Can't give results right now")
+        print("No commands detected. Alexa has stopped working")
+        break
