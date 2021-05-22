@@ -27,7 +27,7 @@ def take_command():
                 command = command.replace('alexa', '')
                 print(command)
     except:
-        pass
+        command = "please try again later"
     return command
 
 
