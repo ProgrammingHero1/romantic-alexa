@@ -4,11 +4,26 @@ import pywhatkit
 import datetime
 import wikipedia
 import pyjokes
+import psutil
+from urllib.request import urlopen
+from bs4 import BeautifulSoup as soup
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
+
+def News():
+    URL = 'https://www.aajtak.in/rssfeeds?id=home'
+    CLIENT = urlopen(URL)
+    
+    XML_PAGE = CLIENT.read()
+    soup_page= soup(XML_PAGE,"xml")
+    news_list = soup_page.findAll("item")
+    for news in news_list:
+        print(news.title.text)
+        talk(news.description.text)
+        print('-'*10)
 
 
 def talk(text):
@@ -17,18 +32,21 @@ def talk(text):
 
 
 def take_command():
+   
+    r = sr.Recognizer()                                                                                  
+    with sr.Microphone() as source:                                                                       
+        print("Listening...")
+        r.pause_threshold =  1
+        audio = r.listen(source)
     try:
-        with sr.Microphone() as source:
-            print('listening...')
-            voice = listener.listen(source)
-            command = listener.recognize_google(voice)
-            command = command.lower()
-            if 'alexa' in command:
-                command = command.replace('alexa', '')
-                print(command)
-    except:
-        pass
-    return command
+        query = r.recognize_google(audio, language='en-in')
+        print('User: ' + query + '\n')
+        
+    except Exception as e:
+        talk('say again sure i will do it')
+        query = take_command()
+    query = query.lower()
+    return query
 
 
 def run_alexa():
@@ -46,6 +64,19 @@ def run_alexa():
         info = wikipedia.summary(person, 1)
         print(info)
         talk(info)
+
+    elif 'tell news' in command:
+        News()
+
+    elif "Introduce yourself" in command:
+        talk("Okay,Let me start by The time I was born,,")
+        talk("I was a dream of a boy dreaming to make a perfect virtual assistant")
+        talk("He soon established the company named ROGER industries")
+        talk("Slowly,I came to life")
+        talk("I started learning various things like calculations,General knowldge etc etc")
+        talk("Now I am capable of doing various things like Beatboxing,opening applications,Cracking jokes,Playing music etc.")
+        talk("Okay,thats a wrap I wont say more ")
+
     elif 'date' in command:
         talk('sorry, I have a headache')
     elif 'are you single' in command:
