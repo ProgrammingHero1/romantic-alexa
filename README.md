@@ -32,5 +32,13 @@ Install these too -
 In case any error pops up install this -
 `pip3 install portAudio`
 
+### For unbound variable error
+Please use python versions 3.6.x only.
+For downloading the optimim version of python, you can go to https://www.python.org/downloads/release/python-365/
+
+### For execution stuck at 'listening...'
+I have included the `listener.adjust_for_ambient_noise(source)` line above the `voice = listener.listen(source)` line.
+This helps in cases where the background noise might have conflicts with the microphone input. 
+
 #### Issues
 If you encounter any problems feel free to open a new issue. Before that check other closed issues and check if your issue matches with any older issues.
