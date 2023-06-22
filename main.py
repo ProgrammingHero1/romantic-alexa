@@ -17,6 +17,7 @@ def talk(text):
 
 
 def take_command():
+    command = ''  # Initialize command with an empty string
     try:
         with sr.Microphone() as source:
             print('listening...')
